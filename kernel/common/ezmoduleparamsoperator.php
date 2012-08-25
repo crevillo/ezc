@@ -4,7 +4,7 @@
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- * @version  2012.5
+ * @version  2012.6
  * @package kernel
  */
 
@@ -15,8 +15,7 @@ The autoload file must be placed somewhere specified in AutoloadPath
 under the group TemplateSettings in settings/site.ini
 
 $eZTemplateOperatorArray = array();
-$eZTemplateOperatorArray[] = array( 'script' => 'templatemoduleparamsoperator.php',
-                                    'class' => '$full_class_name',
+$eZTemplateOperatorArray[] = array( 'class' => '$full_class_name',
                                     'operator_names' => array( 'module_params' ) );
 
 By using module_params you can ...

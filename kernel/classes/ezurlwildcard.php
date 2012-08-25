@@ -4,7 +4,7 @@
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- * @version  2012.5
+ * @version  2012.6
  * @package kernel
  */
 
@@ -676,12 +676,13 @@ class eZURLWildcard extends eZPersistentObject
     public static function wildcardExists( $uriString )
     {
         $wildcardIndex = self::wildcardsIndex();
-        $uriString = self::matchRegexpCode( array( 'source_url' => $uriString ) );
-        if ( in_array( $uriString, $wildcardIndex ) )
+        foreach ( $wildcardIndex as $preg )
         {
-            return true;
+            if ( preg_match( $preg, $uriString ) )
+            {
+                return true;
+            }
         }
-
         return false;
     }
 }

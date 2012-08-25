@@ -4,7 +4,7 @@
 //
 // ## BEGIN COPYRIGHT, LICENSE AND WARRANTY NOTICE ##
 // SOFTWARE NAME: eZ Publish Community Project
-// SOFTWARE RELEASE:  2012.5
+// SOFTWARE RELEASE:  2012.6
 // COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2
 // NOTICE: >
@@ -82,6 +82,13 @@ if ( $http->hasPostVariable( "NodeID" ) or is_numeric( $NodeID ) )
     $http->setSessionVariable( 'oo_direct_import_node', $nodeID );
 }
 
+if ( $http->hasPostVariable( 'Locale' ) )
+{
+    $http->setSessionVariable(
+        'oo_import_locale', $http->postVariable( 'Locale' )
+    );
+}
+
 if ( $module->isCurrentAction( 'OOPlace' ) )
 {
     // We have the file and the placement. Do the actual import.
@@ -95,7 +102,14 @@ if ( $module->isCurrentAction( 'OOPlace' ) )
         if ( file_exists( $fileName ) )
         {
             $import = new eZOOImport();
-            $result = $import->import( $http->sessionVariable( "oo_import_filename" ), $nodeID, $http->sessionVariable( "oo_import_original_filename" ) );
+            $result = $import->import(
+                $http->sessionVariable( "oo_import_filename" ),
+                $nodeID,
+                $http->sessionVariable( "oo_import_original_filename" ),
+                "import",
+                null,
+                $http->sessionVariable( 'oo_import_locale' )
+            );
             // Cleanup of uploaded file
             //unlink( $http->sessionVariable( "oo_import_filename" ) );
 
@@ -123,7 +137,7 @@ if ( $module->isCurrentAction( 'OOPlace' ) )
             $http->removeSessionVariable( 'oo_import_step' );
             $http->removeSessionVariable( 'oo_import_filename' );
             $http->removeSessionVariable( 'oo_import_original_filename' );
-
+            $http->removeSessionVariable( 'oo_import_locale' );
         }
         else
         {
@@ -165,7 +179,11 @@ else
                     if ( $importType != "replace" )
                         $importType = "import";
                     $import = new eZOOImport();
-                    $result = $import->import( $fileName, $nodeID, $originalFileName, $importType );
+                    $result = $import->import(
+                        $fileName, $nodeID, $originalFileName,
+                        $importType, null,
+                        $http->sessionVariable( 'oo_import_locale' )
+                    );
                     // Cleanup of uploaded file
                     unlink( $fileName );
 
@@ -190,6 +208,7 @@ else
                         }
                     }
                     $http->removeSessionVariable( 'oo_direct_import_node' );
+                    $http->removeSessionVariable( 'oo_import_locale' );
                 }
                 else
                 {

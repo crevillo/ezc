@@ -3,7 +3,7 @@
 //
 // ## BEGIN COPYRIGHT, LICENSE AND WARRANTY NOTICE ##
 // SOFTWARE NAME: eZ Publish Community Project
-// SOFTWARE RELEASE:  2012.5
+// SOFTWARE RELEASE:  2012.6
 // COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2
 // NOTICE: >
@@ -76,7 +76,9 @@ class ezfSolrDocumentFieldXML extends ezfSolrDocumentFieldBase
             "\n\$0", "\n\$0", "\n"
             ),
             $text );
-        return strip_tags( $text );
+        $text = strip_tags( $text );
+
+        return html_entity_decode( $text, ENT_QUOTES, 'UTF-8' );
     }
 
 
